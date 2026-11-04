@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101426">
+<title>AFK24 — Roblox AFK туслах</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#151d33;--muted:#aab5d0;--text:#f4f6ff;--accent:#8b7cff;--line:#293451}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#28245a 0,transparent 35%),var(--bg);font:16px system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);min-height:100vh}
+main{max-width:760px;margin:auto;padding:28px 18px 50px}.brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#9a8cff,#4f46e5);display:grid;place-items:center;font-weight:900;font-size:20px}.brand small{display:block;color:var(--muted);margin-top:2px}
+.hero,.card{background:rgba(21,29,51,.92);border:1px solid var(--line);border-radius:22px;padding:22px;margin:14px 0;box-shadow:0 12px 40px #0003}.eyebrow{color:#b8adff;font-size:12px;letter-spacing:.13em;font-weight:800}.hero h1{font-size:clamp(30px,7vw,46px);line-height:1.05;margin:10px 0}.hero p,.muted{color:var(--muted);line-height:1.55}.status{display:flex;gap:9px;align-items:center;color:#ffd98a;font-size:14px;margin-top:16px}.dot{width:9px;height:9px;border-radius:50%;background:#f3b84b}
+.timer{text-align:center;padding:14px 0}.time{font-variant-numeric:tabular-nums;font-size:clamp(42px,12vw,64px);font-weight:800;letter-spacing:.02em}.buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}button{border:0;border-radius:12px;padding:12px 18px;font-weight:750;font-size:15px;background:var(--accent);color:white;cursor:pointer}button.secondary{background:#27324f;color:#e9ecff}button:active{transform:scale(.98)}
+h2{font-size:19px;margin:0 0 12px}.steps{padding-left:20px;color:var(--muted);line-height:1.7}.notice{border-left:3px solid #f0b84b;padding:10px 13px;background:#302a1c;border-radius:8px;color:#ffe3a8;line-height:1.5;font-size:14px}.footer{text-align:center;color:#7784a5;font-size:12px;margin-top:24px}
+</style>
+</head>
+<body>
+<main>
+ <div class="brand"><div class="logo">A</div><div><strong>AFK24</strong><small>Roblox AFK туслах самбар</small></div></div>
+ <section class="hero">
+  <div class="eyebrow">ANDROID 13 • CLOUD PHONE PROTOTYPE</div>
+  <h1>Таны Cloud Phone<br>хяналтын самбар.</h1>
+  <p>Android 13 дээр суурилсан виртуал утасны загвар. Жинхэнэ төхөөрөмж ажиллуулахын тулд cloud сервер холбох шаардлагатай.</p>
+  <div class="status"><span class="dot"></span><span id="status">Таймер эхлээгүй байна</span></div>
+ </section>
+ <section class="card">
+  <h2>AFK таймер</h2>
+  <div class="timer"><div class="time" id="clock">00:00:00</div><div class="muted" id="sub">Хугацааг тоолж эхлүүлэхэд бэлэн</div></div>
+  <div class="buttons">
+   <button id="start">Эхлүүлэх</button><button class="secondary" id="pause">Түр зогсоох</button><button class="secondary" id="reset">Дахин эхлүүлэх</button>
+  </div>
+ </section>
+
+ <section class="card">
+  <h2>Android 13 Cloud Phone</h2>
+  <p class="muted">Сонгосон систем: Android 13. Одоогоор энэ нь удирдлагын загвар бөгөөд cloud төхөөрөмж серверт холбогдоогүй.</p>
+  <div class="buttons">
+   <button id="roblox">🎮 Roblox веб нээх</button>
+   <button class="secondary" id="chrome">🌐 Chrome мэдээлэл</button>
+  </div>
+ </section>
+ <section class="card">
+  <h2>Төхөөрөмжийн мэдээлэл</h2>
+  <div class="notice">Анхаар: Android 13 cloud төхөөрөмж хараахан холбогдоогүй. Энэ загвар Roblox руу нэвтрэхгүй, тоглоом ажиллуулахгүй.</div>
+  <ol class="steps">
+   <li>Roblox-оо өөрийн төхөөрөмж дээр нээгээрэй.</li>
+   <li>Тоглоомын AFK болон автоматаар салгах дүрмийг шалгаарай.</li>
+   <li>Утас унтарсан, Roblox хаагдсан эсвэл холболт тасарсан бол тоглоом онлайн хэвээр үлдэхгүй.</li>
+   <li>Нууц үг, баталгаажуулах код, browser cookie-гээ AFK сайтанд бүү оруулаарай.</li>
+  </ol>
+ </section>
+ <div class="footer">AFK24 Cloud • Android 13 prototype • Албан ёсны Roblox үйлчилгээ биш</div>
+</main>
+<script>
+let seconds=0, running=false, last=0, raf=null;
+const clock=document.getElementById('clock'), status=document.getElementById('status'), sub=document.getElementById('sub');
+function render(){let h=String(Math.floor(seconds/3600)).padStart(2,'0'),m=String(Math.floor(seconds%3600/60)).padStart(2,'0'),s=String(seconds%60).padStart(2,'0');clock.textContent=`${h}:${m}:${s}`}
+function tick(t){if(!running)return;if(!last)last=t;let delta=(t-last)/1000;if(delta>=1){seconds+=Math.floor(delta);last=t;render()}raf=requestAnimationFrame(tick)}
+
+document.getElementById('roblox').onclick=()=>window.open('https://www.roblox.com/home','_blank','noopener');
+document.getElementById('chrome').onclick=()=>window.open('https://www.google.com/chrome/','_blank','noopener');
+
+document.getElementById('start').onclick=()=>{if(running)return;running=true;last=0;status.textContent='Таймер ажиллаж байна';sub.textContent='Зөвхөн энэ хуудсан дээрх хугацааг тоолж байна';raf=requestAnimationFrame(tick)};
+document.getElementById('pause').onclick=()=>{running=false;cancelAnimationFrame(raf);status.textContent='Түр зогссон';sub.textContent='Үргэлжлүүлэх бол Эхлүүлэх товчийг дар'};
+document.getElementById('reset').onclick=()=>{running=false;cancelAnimationFrame(raf);seconds=0;last=0;render();status.textContent='Таймер эхлээгүй байна';sub.textContent='Хугацааг тоолж эхлүүлэхэд бэлэн'};
+</script>
+</body></html>
